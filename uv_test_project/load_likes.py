@@ -1,11 +1,9 @@
 import json
 from pathlib import Path
-from typing import (
-    TypedDict,
-)
+from typing import TypedDict
 
 
-class LikeInfo(TypedDict):
+class LikeInfo(TypedDict, total=False):
     tweetId: str
     fullText: str
     favoritedAt: str
@@ -32,11 +30,11 @@ def main() -> None:
     data_directory = "/Users/lode/Downloads/data"  # Adjust this path if your data directory is elsewhere
     likes = load_likes(data_directory)
     for like_obj in likes:
-        like = like_obj.get("like", {})
-        tweet_id = like.get("tweetId", "N/A")
-        full_text = like.get("fullText", "")
-        favorited_at = like.get("favoritedAt", "N/A")
-        expanded_url = like.get("expandedUrl", "N/A")
+        like: LikeInfo = like_obj.get("like", {})
+        tweet_id: str = like.get("tweetId", "N/A")
+        full_text: str = like.get("fullText", "")
+        favorited_at: str = like.get("favoritedAt", "N/A")
+        expanded_url: str = like.get("expandedUrl", "N/A")
 
         print("Tweet ID:", tweet_id)
         print("Favorited At:", favorited_at)
