@@ -1,20 +1,27 @@
 import json
 from pathlib import Path
-from typing import Any  # 'Any' still needs to be imported from 'typing'
+from typing import (
+    TypedDict,
+)
 
 
-def load_likes(data_directory: str) -> list[dict[str, Any]]:
-    likes: list[dict[str, Any]] = []
+class LikeInfo(TypedDict):
+    tweetId: str
+    fullText: str
+    favoritedAt: str
+    expandedUrl: str
+
+
+def load_likes(data_directory: str) -> list[dict[str, LikeInfo]]:
+    likes: list[dict[str, LikeInfo]] = []
     data_path: Path = Path(data_directory)
-    # Find all like files in the data directory
     like_files = data_path.glob("like*.js")
     for file_path in like_files:
         with file_path.open("r", encoding="utf-8") as f:
             content: str = f.read()
-            # Remove the JavaScript variable assignment
             try:
                 json_data: str = content[content.index("=") + 1 :].strip()
-                like_part: list[dict[str, Any]] = json.loads(json_data)
+                like_part: list[dict[str, LikeInfo]] = json.loads(json_data)
                 likes.extend(like_part)
             except Exception as e:
                 print(f"Error processing file {file_path}: {e}")
